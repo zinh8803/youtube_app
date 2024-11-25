@@ -10,6 +10,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class retrofitClient {
+
     public static final  String BASE_URL = "http://192.168.1.29/Movie_app/";
 
     private static Retrofit retrofit = null;

@@ -126,7 +126,7 @@ public class hisFragment extends Fragment {
                     historyList.clear();
                     historyList.addAll(response.body());
                     adapter.notifyDataSetChanged();
-                    Log.d("HistoryFragment", "Received data: " + historyList.size() + " items");
+                   // Log.d("HistoryFragment", "Received data: " + historyList.size() + " items");
                 } else {
                     Toast.makeText(getContext(), "Không có dữ liệu lịch sử!", Toast.LENGTH_SHORT).show();
                 }

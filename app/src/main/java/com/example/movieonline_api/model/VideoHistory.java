@@ -7,9 +7,6 @@ public class VideoHistory {
     private String video_title;
     private String timestamp;
     private String thumbnail_url;
-    // Getters và Setters
-
-
     public String getThumbnail_url() {
         return thumbnail_url;
     }

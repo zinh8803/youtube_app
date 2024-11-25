@@ -8,7 +8,6 @@ public class user {
     private String gender;
     private String avatar;
 
-    // Constructor
     public user(String username, String email, String password, String phone, String gender, String avatar) {
         this.username = username;
         this.email = email;
@@ -18,7 +17,6 @@ public class user {
         this.avatar = avatar;
     }
 
-    // Getters and setters
     public String getUsername() {
         return username;
     }

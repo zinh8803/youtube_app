@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +16,14 @@ import com.bumptech.glide.Glide;
 import com.example.movieonline_api.R;
 import com.example.movieonline_api.VideoPlayerActivity;
 import com.example.movieonline_api.model.VideoHistory;
+import com.example.movieonline_api.retrofit2.DataClient;
+import com.example.movieonline_api.retrofit2.retrofitClient;
 
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+
 
 public class VideoHistoryAdapter extends RecyclerView.Adapter<VideoHistoryAdapter.ViewHolder> {
 
@@ -51,6 +58,17 @@ public class VideoHistoryAdapter extends RecyclerView.Adapter<VideoHistoryAdapte
             intent.putExtra("VIDEO_TITLE", history.getVideoTitle());
             context.startActivity(intent);
         });
+        holder.itemView.setOnLongClickListener(v -> {
+            new androidx.appcompat.app.AlertDialog.Builder(context)
+                    .setTitle("Xóa Video")
+                    .setMessage("Bạn có chắc chắn muốn xóa video này không?")
+                    .setPositiveButton("Có", (dialog, which) -> {
+                        deleteHistoryItem(history, position); // Gọi hàm xóa video
+                    })
+                    .setNegativeButton("Không", (dialog, which) -> dialog.dismiss())
+                    .show();
+            return true;
+        });
     }
 
     @Override
@@ -70,4 +88,27 @@ public class VideoHistoryAdapter extends RecyclerView.Adapter<VideoHistoryAdapte
 
         }
     }
+    private void deleteHistoryItem(VideoHistory history, int position) {
+        DataClient dataClient = retrofitClient.getdata().create(DataClient.class);
+        Call<ResponseBody> call = dataClient.deleteHistory(history.getUserId(), history.getVideoId());
+
+        call.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Video đã được xóa", Toast.LENGTH_SHORT).show();
+                    historyList.remove(position); // Xóa khỏi danh sách cục bộ
+                    notifyItemRemoved(position); // Cập nhật RecyclerView
+                } else {
+                    Toast.makeText(context, "Không thể xóa video", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(context, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

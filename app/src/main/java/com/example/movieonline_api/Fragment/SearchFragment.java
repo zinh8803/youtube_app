@@ -1,5 +1,7 @@
 package com.example.movieonline_api.Fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -36,7 +38,7 @@ public class SearchFragment extends Fragment {
     private RecyclerView recyclerView;
     private SearchAdapter searchAdapter;
 
-    private static final String API_KEY = "AIzaSyCE0pwgwulU8C1eq7AnS8OcH_3JeJ9sFJI";
+    //private static final String API_KEY = "AIzaSyCE0pwgwulU8C1eq7AnS8OcH_3JeJ9sFJI";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -92,6 +94,12 @@ public class SearchFragment extends Fragment {
 
     // Phương thức tìm kiếm video
     public void searchVideos(String query) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        String API_KEY = sharedPreferences.getString("API_KEY", "default_value");
+        if(API_KEY == null || API_KEY.isEmpty()) {
+            Toast.makeText(getContext(), "API Key không được cấu hình", Toast.LENGTH_SHORT).show();
+            return;
+        }
         YouTubeApiService apiService = YouTubeRetrofitClient.getClient().create(YouTubeApiService.class);
         apiService.searchVideos("snippet", query, 15, API_KEY).enqueue(new Callback<YouTubeResponse>() {
             @Override

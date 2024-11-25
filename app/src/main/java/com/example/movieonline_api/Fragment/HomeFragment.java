@@ -1,12 +1,13 @@
 package com.example.movieonline_api.Fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 
 import com.example.movieonline_api.R;
 
-import com.example.movieonline_api.model.VideoAdapter;
+import com.example.movieonline_api.adapter.VideoAdapter;
 import com.example.movieonline_api.model.YouTubeResponse;
 import com.example.movieonline_api.model.Youtubedata;
 
@@ -27,11 +28,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Tag;
 
 public class HomeFragment extends Fragment {
     private static final String BASE_URL = "https://www.googleapis.com/youtube/v3/";
-    private static final String API_KEY = "AIzaSyCE0pwgwulU8C1eq7AnS8OcH_3JeJ9sFJI";
+ // private static final String API_KEY = "AIzaSyCE0pwgwulU8C1eq7AnS8OcH_3JeJ9sFJI";
+   // String API_KEY = getString(R.string.api_key);
 
 
     private RecyclerView recyclerView;
@@ -60,6 +61,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void fetchYouTubeVideos() {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        String API_KEY = sharedPreferences.getString("API_KEY", "default_value");
+        if(API_KEY == null || API_KEY.isEmpty()) {
+            Toast.makeText(getContext(), "API Key không được cấu hình", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -93,4 +100,6 @@ public class HomeFragment extends Fragment {
                     }
                 });
     }
+
+
 }

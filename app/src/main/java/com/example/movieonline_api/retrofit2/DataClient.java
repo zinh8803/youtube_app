@@ -49,10 +49,6 @@ public interface DataClient {
             @Part("user_id") RequestBody userId
     );
 
-    //    @FormUrlEncoded
-//    @POST("login.php")
-//    Call<ResponseBody> Login(@Field("username") String username,
-//                             @Field("password") String password);
 @FormUrlEncoded
 @POST("login.php")
 Call<JsonObject> Login(
@@ -71,6 +67,15 @@ Call<JsonObject> Login(
     @FormUrlEncoded
     @POST("get_video_history.php")
     Call<List<VideoHistory>> getHistory(@Field("user_id") int userId);
+
+
+    @POST("delete_history.php")
+    @FormUrlEncoded
+    Call<ResponseBody> deleteHistory(
+            @Field("user_id") int userId,
+            @Field("video_id") String videoId
+    );
+
 
 
 }

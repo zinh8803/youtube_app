@@ -181,11 +181,6 @@ return view;
                     ArrayAdapter adapter = (ArrayAdapter) spinnerGender.getAdapter();
                     int position = adapter.getPosition(gender);
                     spinnerGender.setSelection(position);
-//                    String gender = user.getGender();
-//                    if (gender.equals("Nam")) ((RadioButton) rgGender.getChildAt(0)).setChecked(true);
-//                    else if (gender.equals("Nữ")) ((RadioButton) rgGender.getChildAt(1)).setChecked(true);
-//                    else ((RadioButton) rgGender.getChildAt(2)).setChecked(true);
-
                     String avatarUrl ="http://192.168.1.29/Movie_app/"+ user.getAvatar();
                     Glide.with(requireContext()).load(avatarUrl).circleCrop() .into(imgAvatar);
                 } else {
@@ -203,7 +198,6 @@ return view;
     private void saveUserData() {
         String password = edtPassword.getText().toString();
         String phone = edtPhone.getText().toString();
-     //   String gender = ((RadioButton) getView().findViewById(rgGender.getCheckedRadioButtonId())).getText().toString();
         String gender = spinnerGender.getSelectedItem().toString();
         DataClient dataClient = retrofitClient.getdata().create(DataClient.class);
         Call<ResponseBody> call = dataClient.updateUserDetails(userId, password, phone, gender);
@@ -260,7 +254,7 @@ return view;
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(getContext(), "Cập nhật ảnh thành công", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Cập nhật ảnh thành công", Toast.LENGTH_SHORT).show();
                     loadUserData();
                 }else {
                     Log.e("UPLOAD_ERROR", "Response code: " + response.code() + ", Error: " + response.errorBody());
@@ -281,12 +275,10 @@ return view;
 
     private void checkPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // Android 13+ (dùng READ_MEDIA_IMAGES)
             if (requireContext().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.READ_MEDIA_IMAGES}, 100);
             }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // Android 6.0 đến Android 12
             if (requireContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
             }
@@ -311,15 +303,11 @@ return view;
                 .setTitle("Đăng xuất")
                 .setMessage("Bạn có chắc chắn muốn đăng xuất không?")
                 .setNegativeButton("Không", (dialog, which) -> {
-                    // Đóng dialog nếu chọn Không
                     dialog.dismiss();
                 })
                 .setPositiveButton("Có", (dialog, which) -> {
-                    // Xóa SharedPreferences
                     SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
                     sharedPreferences.edit().clear().apply();
-
-                    // Chuyển về MainActivity
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                     requireActivity().finish();

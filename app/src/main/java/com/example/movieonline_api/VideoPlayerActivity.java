@@ -45,8 +45,6 @@ import com.example.movieonline_api.retrofit2.retrofitClient;
         private String videoId;
         private int userId;
        private String videoTitle,videoDescription;
-        private boolean isPlaying = true;
-        YouTubePlayerListener listener;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -60,21 +58,15 @@ import com.example.movieonline_api.retrofit2.retrofitClient;
 
             videoDescription = intent.getStringExtra("description");
             videoTitle = intent.getStringExtra("VIDEO_TITLE");
-
-         //   userId = intent.getIntExtra("USER_ID", -1);
             video_Title.setText(videoTitle);
             video_Description.setText(videoDescription);
             youTubePlayerView = findViewById(R.id.youtube_player_view);
     
-            // Khởi tạo YouTubePlayerView
+
             getLifecycle().addObserver(youTubePlayerView);
             setupHistory();
 
 
-
-
-
-            // Kiểm tra video ID và khởi tạo YouTubePlayer
             if (videoId != null) {
                 youTubePlayerView.addYouTubePlayerListener(new YouTubePlayerListener() {
                     private YouTubePlayer currentPlayer;
@@ -116,7 +108,7 @@ import com.example.movieonline_api.retrofit2.retrofitClient;
     
                     @Override
                     public void onStateChange(@NonNull YouTubePlayer youTubePlayer, @NonNull PlayerConstants.PlayerState playerState) {
-                   //     saveWatchHistory(userId, videoId, videoTitle);
+
                     }
                    
                 
@@ -126,9 +118,6 @@ import com.example.movieonline_api.retrofit2.retrofitClient;
                         if (currentPlayer != null) {
                             currentPlayer.pause();
                         }
-    
-                        // Phát video mới
-
 
                         DefaultPlayerUiController defaultPlayerUiController = new DefaultPlayerUiController(youTubePlayerView, youTubePlayer);
                         youTubePlayerView.setCustomPlayerUi(defaultPlayerUiController.getRootView());
@@ -162,16 +151,13 @@ import com.example.movieonline_api.retrofit2.retrofitClient;
             fetchHistory(historyList, adapter);
         }
         private void fetchHistory(List<VideoHistory> historyList, VideoHistoryAdapter adapter) {
-            // Lấy User ID từ SharedPreferences
             SharedPreferences sharedPreferences = getSharedPreferences("USER_PREFS", MODE_PRIVATE);
-            int userId = sharedPreferences.getInt("USER_ID", -1);
+             userId = sharedPreferences.getInt("USER_ID", -1);
 
             if (userId == -1) {
                 Toast.makeText(this, "Không thể lấy User ID!", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-            // Gọi API lấy danh sách lịch sử
             DataClient dataClient = retrofitClient.getdata().create(DataClient.class);
             Call<List<VideoHistory>> call = dataClient.getHistory(userId);
 

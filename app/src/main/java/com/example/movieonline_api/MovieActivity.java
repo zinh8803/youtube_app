@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
-
-//import com.example.movieonline_api.model.VideoAdapter;
 import com.example.movieonline_api.Fragment.SearchFragment;
 import com.example.movieonline_api.Fragment.hisFragment;
 import com.example.movieonline_api.adapter.PagerAdapter;
@@ -32,23 +30,6 @@ public class MovieActivity extends AppCompatActivity {
         SearchFragment sreach = new SearchFragment();
         PagerAdapter adapter = new PagerAdapter(this);
         viewPager2.setAdapter(adapter);
-
-//        Intent intent = getIntent();
-//        int userId = intent.getIntExtra("USER_ID", -1); // -1 là giá trị mặc định nếu không tìm thấy
-//
-//        if (userId != -1) {
-//            // Nếu user_id được truyền, in ra log hoặc hiển thị
-//            Toast.makeText(this, "User ID: " + userId, Toast.LENGTH_SHORT).show();
-//            Log.d("MovieActivity", "User ID: " + userId);
-//
-//            // Lưu user_id để sử dụng trong các API khác
-//        } else {
-//            // Nếu không có user_id, hiển thị thông báo lỗi
-//            Toast.makeText(this, "Không thể lấy User ID!", Toast.LENGTH_SHORT).show();
-//            Log.e("MovieActivity", "User ID không tồn tại!");
-//        }
-
-        // Liên kết TabLayout với ViewPager2
         new TabLayoutMediator(tablayout, viewPager2, (tab, position) -> {
             switch (position) {
                 case 0:

@@ -49,8 +49,22 @@ public class MainActivity extends AppCompatActivity {
     init();
     register();
     loginUser();
+    saveAPI_key();
+    saveIp_address();
+    }
 
+    private void saveIp_address() {
+        SharedPreferences sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("ip_address", "http://192.168.1.29/Movie_app/");
+        editor.apply();
+    }
 
+    private void saveAPI_key(){
+        SharedPreferences sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("API_KEY", "AIzaSyCE0pwgwulU8C1eq7AnS8OcH_3JeJ9sFJI");
+        editor.apply();
     }
     private void init(){
         edttk = findViewById(R.id.edtTK);
